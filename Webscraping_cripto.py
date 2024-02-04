@@ -6,13 +6,17 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import spacy
-from website_data import website_data
-#nltk.download('vader_lexicon')
-#nltk.download('stopwords')
-#nltk.download('punkt')
+from website_data import website_data # Updated import statement for the WebsiteData class
+nltk.download('vader_lexicon')
+nltk.download('vader_lexicon')
+nltk.download('stopwords')
+nltk.download('punkt')
 
+# Load cryptocurrency data from an Excel file
 cryptocurrencies = pd.read_excel('Criptocurrency_list.xlsx')
+# Create a dictionary mapping cryptocurrency names to tickers
 crypto_dict={name.lower().strip(): ticker for name, ticker in zip(cryptocurrencies['Name'], cryptocurrencies['Ticker'])}
+# Load the spaCy English model
 nlp = spacy.load('en_core_web_sm')
 
 
@@ -25,6 +29,7 @@ def clean_text(text)->str:
     return ' '.join(filtered_words)
         
 def analyze_sentiment(text)->str:
+    #Analyze sentiment of the text and return a trading recommendation.
     sia = SentimentIntensityAnalyzer()
     sentiment_score = sia.polarity_scores(text)['compound']
     # Assume a simple threshold for sentiment
@@ -43,6 +48,7 @@ def get_main_currency(text)->str:
     return recognized_currencies[0] if recognized_currencies else None
 
 def run_process(website:str)->None:
+    #Run the process for a specific website, extract relevant posts, and analyze sentiment.
     s=website_data()
     if website=="cryptonews_relevantpost":
         posts=s.cryptonews_relevantpost()
