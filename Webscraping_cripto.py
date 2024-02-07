@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import nltk
@@ -6,7 +5,8 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import spacy
-from website_data import website_data # Updated import statement for the WebsiteData class
+from website_data import cryptonews_relevantpost, coindesk_relevantpost, yahoo_relevantpost, independent_relevantpost, text_from_relevant
+
 nltk.download('vader_lexicon')
 nltk.download('vader_lexicon')
 nltk.download('stopwords')
@@ -49,21 +49,20 @@ def get_main_currency(text)->str:
 
 def run_process(website:str)->None:
     #Run the process for a specific website, extract relevant posts, and analyze sentiment.
-    s=website_data()
     if website=="cryptonews_relevantpost":
-        posts=s.cryptonews_relevantpost()
+        posts=cryptonews_relevantpost()
         type="cryptonews_relevantpost"
     elif website=="coindesk_relevantpost":
-        posts=s.coindesk_relevantpost()
+        posts=coindesk_relevantpost()
         type="coindesk_relevantpost"
     elif website=="yahoo_relevantpost":
-        posts=s.yahoo_relevantpost()
+        posts=yahoo_relevantpost()
         type="yahoo_relevantpost"
     elif website=="independent_relevantpost":
-        posts=s.independent_relevantpost()
+        posts=independent_relevantpost()
         type="independent_relevantpost"
     for post in posts:
-        text=s.text_from_relevant(post, type)
+        text=text_from_relevant(post, type)
         clean=clean_text(text)
         sentiment=analyze_sentiment(clean)
         currency=get_main_currency(text)
